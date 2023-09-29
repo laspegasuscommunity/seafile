@@ -1,0 +1,23 @@
+version: "3.8"
+
+services:
+  #Это конфигурация Docker Compose для запуска облачного хранилища Seafile.
+  seafile:
+    container_name: seafile
+    env_file: seafile.env
+    image: seafileltd/seafile-mc:latest
+    labels:
+      com.centurylinklabs.watchtower.enable: "true"
+      traefik.enable: "true"
+      traefik.http.routers.seafile.entrypoints: "websecure"
+      traefik.http.routers.seafile.rule: "Host(`cloud.${DOMAIN}`)"
+      traefik.http.routers.seafile.service: "seafile"
+      traefik.http.routers.seafile.tls.certresolver: "letsencrypt"
+      traefik.http.services.seafile.loadbalancer.server.port: "80"
+    volumes:
+      - "/mnt/docker-volumes/cloud/seafile/shared:/shared"
+
+networks:
+  default:
+    external: true
+    name: $NETWORK
