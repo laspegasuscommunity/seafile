@@ -6,6 +6,10 @@ services:
     container_name: seafile
     env_file: seafile.env
     image: seafileltd/seafile-mc:latest
+    deploy:
+      restart_policy:
+        condition: always
+        delay: 5s
     labels:
       com.centurylinklabs.watchtower.enable: "true"
       traefik.enable: "true"
